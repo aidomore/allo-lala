@@ -8,7 +8,32 @@ let fxBus = null;    // гудки, рингтон
 let noise = null;
 let ringTimer = null;
 
+// Короткая тишина в обычном <audio>. На iPhone/iPad проигрывание такого
+// элемента переводит звук приложения в режим «плеер»: Web Audio начинает
+// звучать и в веб-приложении на главном экране, и при включённом «Без звука».
+let silentEl = null;
+function silentAudio() {
+  if (!silentEl) {
+    const rate = 8000, n = rate / 4; // 0,25 с тишины, WAV 8 бит
+    const b = new Uint8Array(44 + n);
+    const v = new DataView(b.buffer);
+    const str = (o, s) => [...s].forEach((c, i) => (b[o + i] = c.charCodeAt(0)));
+    str(0, 'RIFF'); v.setUint32(4, 36 + n, true); str(8, 'WAVEfmt ');
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, rate, true); v.setUint32(28, rate, true);
+    v.setUint16(32, 1, true); v.setUint16(34, 8, true);
+    str(36, 'data'); v.setUint32(40, n, true);
+    b.fill(128, 44);
+    silentEl = document.createElement('audio');
+    silentEl.setAttribute('playsinline', '');
+    silentEl.preload = 'auto';
+    silentEl.src = URL.createObjectURL(new Blob([b], { type: 'audio/wav' }));
+  }
+  if (silentEl.paused) silentEl.play().catch(() => {});
+}
+
 export function unlockAudio() {
+  if (!ctx || ctx.state !== 'running') silentAudio();
   if (!ctx) {
     try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch {}
     const AC = window.AudioContext || window.webkitAudioContext;

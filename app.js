@@ -45,6 +45,17 @@ function onTap(el, fn) {
   });
 }
 
+// На сенсорных экранах браузер разрешает включать звук только по «отпусканию»
+// пальца (touchend / pointerup / click), а не по первому касанию. Поэтому
+// звук разблокируется на всех этих событиях; первое нажатие может прозвучать
+// чуть позже или беззвучно, дальше всё работает.
+for (const ev of ['touchend', 'pointerup', 'click', 'keydown']) {
+  document.addEventListener(ev, () => A.unlockAudio(), { capture: true, passive: true });
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) A.unlockAudio();
+});
+
 // ---------- клавиатура ----------
 
 const keysEl = $('.keys');
@@ -330,5 +341,10 @@ scheduleIncoming();
 // ---------- офлайн ----------
 
 if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  // Когда приходит новая версия игры, страница один раз перезагружается сама.
+  const hadController = !!navigator.serviceWorker.controller;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (hadController && phone.dataset.screen === 'home') location.reload();
+  });
   navigator.serviceWorker.register('sw.js');
 }
