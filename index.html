@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Алло, ляля</title>
+  <meta name="theme-color" content="#FFE9D2">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Алло, ляля">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-180.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="phone" data-screen="home" data-tab="keypad">
+    <header class="status">
+      <span class="time">12:00</span>
+      <span class="status-icons">
+        <svg viewBox="0 0 24 16"><rect x="1" y="10" width="4" height="5" rx="1"/><rect x="7" y="7" width="4" height="8" rx="1"/><rect x="13" y="4" width="4" height="11" rx="1"/><rect x="19" y="1" width="4" height="14" rx="1"/></svg>
+        <svg viewBox="0 0 30 16"><rect x="1" y="2" width="24" height="12" rx="3.5" fill="none" stroke="currentColor" stroke-width="2"/><rect x="4" y="5" width="18" height="6" rx="1.5" fill="#3CC46B"/><rect x="26" y="5.5" width="2.5" height="5" rx="1"/></svg>
+      </span>
+    </header>
+
+    <section id="home">
+      <div id="keypad-view">
+        <div class="display">
+          <span id="number"></span>
+          <button id="backspace" aria-label="стереть">
+            <svg viewBox="0 0 32 24"><path d="M10 2h18a3 3 0 0 1 3 3v14a3 3 0 0 1-3 3H10L1 12z" fill="currentColor"/><path d="M15 8l8 8M23 8l-8 8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>
+          </button>
+        </div>
+        <div class="keys"></div>
+        <button id="dial" class="round-btn green" aria-label="позвонить"><svg viewBox="0 0 24 24"><use href="#handset"/></svg></button>
+      </div>
+
+      <div id="contacts-view"><div class="contacts"></div></div>
+
+      <nav class="tabs">
+        <button data-tab="keypad" aria-label="кнопки">
+          <svg viewBox="0 0 24 24"><g fill="currentColor"><circle cx="5" cy="5" r="2.4"/><circle cx="12" cy="5" r="2.4"/><circle cx="19" cy="5" r="2.4"/><circle cx="5" cy="12" r="2.4"/><circle cx="12" cy="12" r="2.4"/><circle cx="19" cy="12" r="2.4"/><circle cx="5" cy="19" r="2.4"/><circle cx="12" cy="19" r="2.4"/><circle cx="19" cy="19" r="2.4"/></g></svg>
+        </button>
+        <button data-tab="contacts" aria-label="зверушки">
+          <svg viewBox="0 0 24 24"><g fill="currentColor"><circle cx="5.5" cy="6" r="3.6"/><circle cx="18.5" cy="6" r="3.6"/><circle cx="12" cy="13.5" r="9"/></g><circle cx="9" cy="12.5" r="1.4" fill="#fff"/><circle cx="15" cy="12.5" r="1.4" fill="#fff"/><path d="M9.5 16.5q2.5 2 5 0" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+        </button>
+      </nav>
+    </section>
+
+    <section id="call" data-mode="outgoing">
+      <div class="call-top">
+        <div class="call-number"></div>
+        <div class="call-timer">00:00</div>
+      </div>
+      <div class="stage">
+        <div class="rings"><i></i><i></i><i></i></div>
+        <div class="avatar"></div>
+        <div class="hearts"></div>
+      </div>
+      <div class="call-buttons">
+        <button id="answer" class="round-btn green" aria-label="ответить"><svg viewBox="0 0 24 24"><use href="#handset"/></svg></button>
+        <button id="hangup" class="round-btn red" aria-label="положить трубку"><svg viewBox="0 0 24 24" class="down"><use href="#handset"/></svg></button>
+      </div>
+    </section>
+  </div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <path id="handset" fill="#fff" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/>
+    </defs>
+  </svg>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

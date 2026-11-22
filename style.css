@@ -1,0 +1,333 @@
+:root {
+  --bg: #FFF6EC;
+  --ink: #4A3A2E;
+  --green: #3CC46B;
+  --red: #F25C54;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+html, body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  height: 100dvh;
+  background: linear-gradient(160deg, #FFE7CF, #FFD8E6);
+  font-family: ui-rounded, "SF Pro Rounded", "Nunito", system-ui, sans-serif;
+  color: var(--ink);
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* «Телефон»: на телефоне — весь экран, на планшете — игрушечный телефон по центру */
+#phone {
+  position: relative;
+  width: min(100vw, 54dvh);
+  height: 100dvh;
+  container-type: inline-size;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+@media (min-aspect-ratio: 3/5) {
+  #phone {
+    width: min(94vw, 51dvh);
+    height: 95dvh;
+    border: 2.4cqw solid #4A3A2E;
+    border-radius: 9cqw;
+    box-shadow: 0 2dvh 6dvh rgba(120, 70, 40, .28);
+  }
+}
+
+/* ---------- статус-бар ---------- */
+.status {
+  flex: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: max(2.5cqw, env(safe-area-inset-top)) 7cqw 1cqw;
+  font-size: 5cqw;
+  font-weight: 700;
+}
+.status-icons { display: flex; gap: 2cqw; align-items: center; }
+.status-icons svg { height: 4cqw; fill: currentColor; }
+
+/* ---------- главный экран ---------- */
+#home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+#phone[data-screen="call"] #home { display: none; }
+#phone[data-screen="home"] #call { display: none; }
+
+#keypad-view, #contacts-view {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+#phone[data-tab="keypad"] #contacts-view,
+#phone[data-tab="contacts"] #keypad-view { display: none; }
+
+.display {
+  position: relative;
+  width: 100%;
+  height: 16cqw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18cqw;
+}
+#number {
+  font-size: 11cqw;
+  font-weight: 700;
+  letter-spacing: .06em;
+  white-space: nowrap;
+  overflow: hidden;
+  direction: rtl; /* если номер длинный — видно последние цифры */
+}
+#backspace {
+  position: absolute;
+  right: 5cqw;
+  width: 14cqw;
+  height: 14cqw;
+  display: grid;
+  place-items: center;
+  color: #CDB8A8;
+  visibility: hidden;
+}
+#backspace svg { width: 10cqw; }
+.has-number #backspace { visibility: visible; }
+
+.keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4cqw 6cqw;
+  width: 76cqw;
+}
+.key {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  font-size: 11cqw;
+  font-weight: 800;
+  color: #fff;
+  background: var(--c);
+  box-shadow: 0 1.4cqw 0 color-mix(in srgb, var(--c), #000 18%);
+  transition: transform .08s, box-shadow .08s;
+  display: grid;
+  place-items: center;
+  text-shadow: 0 .4cqw 0 rgba(0,0,0,.12);
+}
+.key.pressed {
+  transform: translateY(1.2cqw) scale(.94);
+  box-shadow: 0 .2cqw 0 color-mix(in srgb, var(--c), #000 18%);
+}
+
+.round-btn {
+  width: 22cqw;
+  height: 22cqw;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  transition: transform .1s;
+}
+.round-btn svg { width: 11cqw; height: 11cqw; }
+.round-btn svg.down { transform: rotate(135deg); }
+.round-btn.green { background: var(--green); box-shadow: 0 1.4cqw 0 #2A9A51; }
+.round-btn.red { background: var(--red); box-shadow: 0 1.4cqw 0 #C2403A; }
+.round-btn.pressed { transform: translateY(1cqw) scale(.95); }
+
+#dial { animation: nudge 3s ease-in-out infinite; }
+.has-number #dial { animation: pulse 1.2s ease-in-out infinite; }
+
+/* ---------- контакты ---------- */
+.contacts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6cqw 8cqw;
+  width: 80cqw;
+}
+.contact {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--l);
+  border: 2cqw solid var(--c);
+  overflow: hidden;
+  transition: transform .1s;
+}
+.contact.pressed { transform: scale(.92); }
+.contact .face { width: 100%; height: 100%; display: block; }
+
+/* ---------- нижние вкладки ---------- */
+.tabs {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  gap: 16cqw;
+  padding: 2cqw 0 max(3cqw, env(safe-area-inset-bottom));
+}
+.tabs button {
+  width: 18cqw;
+  height: 14cqw;
+  border-radius: 7cqw;
+  display: grid;
+  place-items: center;
+  color: #CDB8A8;
+}
+.tabs svg { width: 9cqw; height: 9cqw; }
+#phone[data-tab="keypad"] .tabs [data-tab="keypad"],
+#phone[data-tab="contacts"] .tabs [data-tab="contacts"] {
+  background: #FFE2C4;
+  color: #E0873A;
+}
+
+/* ---------- экран звонка ---------- */
+#call {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: radial-gradient(circle at 50% 42%, var(--l, #fff) 0 38%, var(--bg) 70%);
+}
+.call-top {
+  height: 18cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.call-number { font-size: 8cqw; font-weight: 700; letter-spacing: .05em; }
+.call-timer { font-size: 6cqw; font-weight: 700; opacity: .55; display: none; }
+#call[data-mode="talk"] .call-timer,
+#call[data-mode="end"] .call-timer { display: block; }
+#call[data-mode="talk"] .call-number,
+#call[data-mode="end"] .call-number { display: none; }
+
+.stage {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
+.avatar {
+  position: relative;
+  z-index: 1;
+  width: 62cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--l);
+  border: 2.4cqw solid var(--c);
+  overflow: hidden;
+  transition: width .5s cubic-bezier(.3, 1.4, .5, 1), border-radius .5s, border-color .5s;
+}
+.avatar .face { width: 100%; height: 100%; display: block; overflow: visible; }
+#call[data-mode="talk"] .avatar,
+#call[data-mode="end"] .avatar {
+  width: 100cqw;
+  border-color: transparent;
+  background: transparent;
+  overflow: visible;
+}
+
+/* пульсирующие кольца при исходящем звонке */
+.rings { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; }
+.rings i {
+  position: absolute;
+  width: 62cqw;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 1.6cqw solid var(--c);
+  opacity: 0;
+}
+#call[data-mode="outgoing"] .rings i { animation: ring 2.1s ease-out infinite; }
+#call[data-mode="outgoing"] .rings i:nth-child(2) { animation-delay: .7s; }
+#call[data-mode="outgoing"] .rings i:nth-child(3) { animation-delay: 1.4s; }
+
+#call[data-mode="incoming"] .avatar { animation: hop .9s ease-in-out infinite; }
+#call[data-mode="incoming"] .rings i { animation: ring 1.4s ease-out infinite; }
+#call[data-mode="incoming"] .rings i:nth-child(2) { animation-delay: .45s; }
+#call[data-mode="incoming"] .rings i:nth-child(3) { animation-delay: .9s; }
+
+.call-buttons {
+  height: 40cqw;
+  display: flex;
+  gap: 22cqw;
+  align-items: center;
+  justify-content: center;
+}
+.call-buttons .round-btn { width: 24cqw; height: 24cqw; }
+#answer { display: none; }
+#call[data-mode="incoming"] #answer { display: grid; animation: pulse 1s ease-in-out infinite; }
+#call[data-mode="end"] .call-buttons { visibility: hidden; }
+
+/* ---------- персонаж ---------- */
+.face .body { transform-box: fill-box; transform-origin: 50% 90%; }
+.face .eyes { transform-box: fill-box; transform-origin: center; animation: blink 4.2s infinite; }
+.face .mouth {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+  transform: scaleY(var(--open, 0));
+}
+.face .paw { opacity: 0; transform-box: fill-box; transform-origin: 50% 100%; transition: opacity .3s; }
+
+#call[data-mode="talk"] .face .body { animation: breathe 2.8s ease-in-out infinite; }
+#call[data-mode="talk"] .avatar.listening .face .body { animation: listen 3s ease-in-out infinite; }
+.avatar.waving .face .paw { opacity: 1; animation: wave .5s ease-in-out infinite alternate; }
+.contact:nth-child(2n) .eyes { animation-delay: 1.3s; }
+.contact:nth-child(3n) .eyes { animation-delay: 2.6s; }
+
+/* сердечки на прощание */
+.hearts { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.hearts span {
+  position: absolute;
+  bottom: 20%;
+  font-size: 10cqw;
+  animation: float 2s ease-out forwards;
+}
+
+@keyframes blink { 0%, 92%, 100% { transform: scaleY(1); } 95% { transform: scaleY(.1); } }
+@keyframes breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.025, 1.04); } }
+@keyframes listen { 0%, 100% { transform: rotate(-7deg); } 50% { transform: rotate(-9deg) translateY(-1%); } }
+@keyframes wave { from { transform: rotate(-18deg); } to { transform: rotate(22deg); } }
+@keyframes hop { 0%, 100% { transform: translateY(0) rotate(0); } 25% { transform: translateY(-7%) rotate(-5deg); } 50% { transform: translateY(0) rotate(0); } 75% { transform: translateY(-4%) rotate(5deg); } }
+@keyframes ring { from { transform: scale(1); opacity: .5; } to { transform: scale(1.5); opacity: 0; } }
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes nudge { 0%, 80%, 100% { transform: rotate(0); } 85% { transform: rotate(-10deg); } 90% { transform: rotate(10deg); } 95% { transform: rotate(-6deg); } }
+@keyframes float {
+  from { transform: translateY(0) scale(.6); opacity: 0; }
+  20% { opacity: 1; }
+  to { transform: translateY(-55cqw) scale(1.2); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: .01s !important; animation-iteration-count: 1 !important; }
+}
