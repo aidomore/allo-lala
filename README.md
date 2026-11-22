@@ -1,5 +1,7 @@
 # Алло, ляля
 
+**Играть:** https://aidomore.github.io/allo-lala/
+
 Игрушечный телефон для малыша: нажимаешь цветные кнопки, звонишь, слышишь гудки,
 и зверушка отвечает на билибирдинском языке.
 
@@ -20,10 +22,10 @@
 
 ## Как выложить на GitHub Pages
 
-1. На github.com создайте репозиторий (например, `allo-lyalya`), тип **Public**.
+1. На github.com создайте репозиторий (например, `allo-lala`), тип **Public**.
 2. «Add file → Upload files» и перетащите все файлы и папку `icons`.
 3. Settings → Pages → Source: «Deploy from a branch», ветка `main`, папка `/ (root)` → Save.
-4. Через минуту игра будет на `https://<ваш-логин>.github.io/allo-lyalya/`.
+4. Через минуту игра будет на `https://<ваш-логин>.github.io/allo-lala/`.
 
 ## Как поставить на планшет
 
